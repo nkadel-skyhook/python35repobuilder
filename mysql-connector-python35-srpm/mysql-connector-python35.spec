@@ -1,72 +1,58 @@
-# spec file for mysql-connector-python
+# spec file for mysql-connector-python35u
 #
 # Copyright (c) 2011-2014 Remi Collet
 # License: CC-BY-SA
 # http://creativecommons.org/licenses/by-sa/3.0/
 #
+# Updated by Nico Kadel-Garcia <nkadel@skyhookwireless.com>
+#
 # Please, preserve the changelog entries
 #
-%{!?__python2:       %global __python2 %{__python}}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-
-%if 0%{?fedora} >= 13
-%global with_python3 1
-%else
-%global with_python3 0
-%endif
 
 # Tests only run on manual build --with tests
 # Tests rely on MySQL version 5.6
 %global with_tests   %{?_with_tests:1}%{!?_with_tests:0}
+# Package has customized name
+%global srcname  mysql-connector-python
 
-Name:           mysql-connector-python
+%global __python3 /usr/bin/python3.5m
+
+%{!?__python3:       %global __python3 %{__python}}
+%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
+
+
+Name:           mysql-connector-python35u
 Version:        1.1.6
-Release:        1%{?dist}
-Summary:        MySQL Connector for Python 2
+Release:        0.1%{?dist}
+Summary:        MySQL Connector for Python 3.5
 
 Group:          Development/Languages
 License:        GPLv2 with exceptions
-URL:            http://dev.mysql.com/doc/connector-python/en/index.html
+URL:            https://dev.mysql.com/doc/connector-python/en/index.html
 # Upstream has a mirror redirector for downloads, so the URL is hard to
 # represent statically.  You can get the tarball by following a link from
 # http://dev.mysql.com/downloads/connector/python/
-Source0:        %{name}-%{version}.tar.gz
+#Source0:        %{name}-%{version}.tar.gz
+Source0:        %{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  python2-devel >= 2.6
-%if 0%{?with_python3}
-BuildRequires:  python3-devel >= 3
-%endif
-%if %{with_tests}
-# for unittest
+# Use Python 3.5 specific packages
+BuildRequires:  python35u-devel >= 3.5
 BuildRequires:  mysql-server
-%endif
-
 
 %description
 MySQL Connector/Python is implementing the MySQL Client/Server protocol
 completely in Python. No MySQL libraries are needed, and no compilation
 is necessary to run this Python DB API v2.0 compliant driver.
 
-Documentation: http://dev.mysql.com/doc/connector-python/en/index.html
-
-
-%if 0%{?with_python3}
-%package -n mysql-connector-python3
-Summary: MySQL Connector for Python 3
-
-%description -n mysql-connector-python3
-MySQL Connector/Python is implementing the MySQL Client/Server protocol
-completely in Python. No MySQL libraries are needed, and no compilation
-is necessary to run this Python DB API v2.0 compliant driver.
+Not that This version is specifically for Python 3.5 from IUS.
 
 Documentation: http://dev.mysql.com/doc/connector-python/en/index.html
-%endif
-
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{srcname}-%{version}
 chmod -x python?/examples/*py
 
 
@@ -77,24 +63,13 @@ chmod -x python?/examples/*py
 %install
 rm -rf %{buildroot}
 
-%if 0%{?with_python3}
-# Python 3 build
 %{__python3} setup.py install --root %{buildroot}
 rm -rf build
-%endif
-
-# Python 2 build (end with this for tests)
-%{__python2} setup.py install --root %{buildroot}
-
 
 %check
 %if %{with_tests}
 # known failed tests
 # bugs.BugOra14201459.test_error1426
-
-%{__python2} unittests.py \
-    --with-mysql=%{_prefix} \
-    --verbosity=1
 
 %{__python3} unittests.py \
     --with-mysql=%{_prefix} \
@@ -111,19 +86,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc ChangeLog COPYING README* docs/README_DOCS.txt
-%doc python2/examples
-%{python2_sitelib}/*
-
-
-%if 0%{?with_python3}
-%files -n mysql-connector-python3
-%defattr(-,root,root,-)
-%doc ChangeLog COPYING README* docs/README_DOCS.txt
 %doc python3/examples
 %{python3_sitelib}/*
-%endif
 
 %changelog
+* Thu Jan 14 2016 Nico Kadel-Garcia <nkadel@skyhookwireless.co> - 1.1.6-0.1
+- Rename and configure spefically for Python 3.5 from IUS
+
 * Wed Apr 16 2014 Remi Collet <remi@fedoraproject.org> - 1.1.6-1
 - version 1.1.6 GA
   http://dev.mysql.com/doc/relnotes/connector-python/en/news-1-1-6.html
@@ -174,4 +143,3 @@ rm -rf %{buildroot}
 
 * Wed Mar 09 2011 Remi Collet <Fedora@famillecollet.com> 0.3.2-1
 - first RPM
-

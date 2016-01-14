@@ -1,0 +1,15 @@
+[python35repo]
+name=RT4 $releasever - $basearch
+baseurl=file://@@@REPOBASEDIR@@@/python35repo/$releasever/$basearch
+enabled=0
+gpgcheck=0
+# Set very, very short for RPM building
+metadata_expire=1
+
+[python35repo-source]
+name=RT4 $releasever - Source
+baseurl=file://@@@REPOBASEDIR@@@/python35repo/$releasever/SRPMS
+enabled=0
+gpgcheck=0
+# Set very, very short for RPM building
+metadata_expire=1
