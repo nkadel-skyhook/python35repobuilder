@@ -6,3 +6,4 @@
 epel-*
 pythonrepo-*
 rpmbuild
+*.zip

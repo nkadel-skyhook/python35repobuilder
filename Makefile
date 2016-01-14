@@ -21,6 +21,7 @@ PYTHON35PKGS+=
 # Populate python35repo with packages that require python35repo
 # Verify build setup first!
 all:: /usr/bin/createrepo
+all:: tarballs
 all:: python35repo-6-x86_64.cfg
 all:: iuspy35-6-x86_64.cfg
 
@@ -58,6 +59,14 @@ python35repo.repo:: python35repo.repo.in
 python35repo.repo:: FORCE
 	@diff -u $@ /etc/yum.repos.d/$@ || \
 		(echo Warning: /etc/yum.repos.d/$@ does not match $@, exiting; exit 1)
+
+TARBALLS+=mysql-connector-python35-srpm/mysql-connector-python-2.0.4.zip
+tarballs:: $(TARBALLS)
+
+# Ensure that local tarballs match or are downloaded from master
+mysql-connector-python35-srpm/mysql-connector-python-2.0.4.zip::
+	wget --quiet --mirror --no-host-directories --cut-dirs=4 --directory-prefix=`dirname $@` \
+		http://cdn.mysql.com/Downloads/Connector-Python/`basename $@`
 
 ius:: $(IUSPKGS)
 

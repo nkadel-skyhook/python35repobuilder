@@ -23,7 +23,7 @@
 
 
 Name:           mysql-connector-python35u
-Version:        1.1.6
+Version:        2.0.4
 Release:        0.1%{?dist}
 Summary:        MySQL Connector for Python 3.5
 
@@ -34,7 +34,7 @@ URL:            https://dev.mysql.com/doc/connector-python/en/index.html
 # represent statically.  You can get the tarball by following a link from
 # http://dev.mysql.com/downloads/connector/python/
 #Source0:        %{name}-%{version}.tar.gz
-Source0:        %{srcname}-%{version}.tar.gz
+Source0: http://cdn.mysql.com/Downloads/Connector-Python/%{srcname}-%{version}.zip
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -53,7 +53,7 @@ Documentation: http://dev.mysql.com/doc/connector-python/en/index.html
 
 %prep
 %setup -q -n %{srcname}-%{version}
-chmod -x python?/examples/*py
+chmod -x examples/*py
 
 
 %build
@@ -85,13 +85,16 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog COPYING README* docs/README_DOCS.txt
-%doc python3/examples
+%doc CHANGES.txt LICENSE.txt README.txt
+%doc examples/*.py
 %{python3_sitelib}/*
 
 %changelog
-* Thu Jan 14 2016 Nico Kadel-Garcia <nkadel@skyhookwireless.co> - 1.1.6-0.1
+* Thu Jan 14 2016 Nico Kadel-Garcia <nkadel@skyhookwireless.co> - 2.0.4-0.1
 - Rename and configure spefically for Python 3.5 from IUS
+- Update to 2.0.4
+- Include full URL for Soource
+- Switch to "examples/*.py", not python version specific examples
 
 * Wed Apr 16 2014 Remi Collet <remi@fedoraproject.org> - 1.1.6-1
 - version 1.1.6 GA
