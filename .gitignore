@@ -1,0 +1,12 @@
+*.gz
+*.out
+*.rpm
+*~
+epel-*
+iuspy35-6-x86_64.cfg
+python35repo-6-x86_64.cfg
+python35repo.repo
+*repo/6/SRPMS/*
+*repo/6/x86_64/*
+repodata
+rpmbuild

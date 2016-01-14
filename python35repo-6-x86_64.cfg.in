@@ -1,0 +1,81 @@
+config_opts['root'] = 'python35repo-6-x86_64'
+config_opts['target_arch'] = 'x86_64'
+config_opts['legal_host_arches'] = ('x86_64',)
+config_opts['chroot_setup_cmd'] = 'groupinstall buildsys-build'
+config_opts['dist'] = 'el6'  # only useful for --resultdir variable subst
+
+config_opts['yum.conf'] = """
+[main]
+cachedir=/var/cache/yum
+debuglevel=1
+reposdir=/dev/null
+logfile=/var/log/yum.log
+retries=20
+obsoletes=1
+gpgcheck=0
+assumeyes=1
+syslog_ident=mock
+syslog_device=
+
+[base]
+name=BaseOS
+enabled=1
+#mirrorlist=http://mirrorlist.centos.org/?release=6&arch=x86_64&repo=os
+baseurl=http://localhost/centos/6/os/x86_64
+failovermethod=priority
+
+[updates-security]
+name=updates-security
+enabled=1
+#mirrorlist=http://mirrorlist.centos.org/?release=6&arch=x86_64&repo=updates
+baseurl=http://localhost/centos/6/updates/x86_64
+failovermethod=priority
+
+[updates-fastbugs]
+name=updates-fastbugs
+enabled=0
+#mirrorlist=http://mirrorlist.centos.org/?release=6&arch=x86_64&repo=updates
+baseurl=http://localhost/centos/6/updates/x86_64
+failovermethod=priority
+
+[epel]
+name=epel
+#mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=x86_64
+baseurl=http://localhost/epel/6/x86_64/
+failovermethod=priority
+
+[testing]
+name=epel-testing
+enabled=0
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=testing-epel6&arch=x86_64
+failovermethod=priority
+
+[local]
+name=local
+baseurl=http://kojipkgs.fedoraproject.org/repos/dist-6E-epel-build/latest/x86_64/
+cost=2000
+enabled=0
+
+[epel-debug]
+name=epel-debug
+mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=epel-debug-6&arch=x86_64
+failovermethod=priority
+enabled=0
+
+# Added for python build dependencies
+[ius]
+name=IUS Community Packages for Enterprise Linux 6 - x86_64
+enabled=1
+failovermethod=priority
+gpgcheck=1
+gpgkey=https://dl.iuscommunity.org/pub/ius/IUS-COMMUNITY-GPG-KEY
+mirrorlist=https://mirrors.iuscommunity.org/mirrorlist/?repo=ius-centos6&arch=x86_64&protocol=http
+
+[python35repo]
+name=python35repo
+enabled=1
+baseurl=file://@@@REPOBASEDIR@@@/python35repo/6/x86_64/
+failovermethod=priority
+cost=100
+metadata_expire=1
+"""
