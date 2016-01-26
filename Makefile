@@ -25,6 +25,7 @@ all:: tarballs
 all:: python35repo-6-x86_64.cfg
 all:: iuspy35-6-x86_64.cfg
 
+all:: ius-install
 all:: python35-install
 
 install:: ius-install python35-install
